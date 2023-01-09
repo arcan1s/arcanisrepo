@@ -2,7 +2,7 @@
 # Contributor: Manuel Schneider  <manuelschneid3r at googles mail>
 
 pkgname=albert
-pkgver=0.18.5
+pkgver=0.18.10
 pkgrel=1
 pkgdesc="A sophisticated standalone keyboard launcher"
 arch=('x86_64')
@@ -49,6 +49,7 @@ build() {
     -DCMAKE_BUILD_TYPE=MinSizeRel \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_FIND_PACKAGE_RESOLVE_SYMLINKS=ON \
     -DQHOTKEY_INSTALL=OFF \
     -DBUILD_WIDGETSBOXMODEL=ON \
     -DBUILD_APPLICATIONS_XDG=ON \
