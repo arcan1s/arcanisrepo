@@ -1,0 +1,19 @@
+pkgbase = postman-bin
+	pkgdesc = Build, test, and document your APIs faster
+	pkgver = 10.10.3
+	pkgrel = 1
+	url = https://www.getpostman.com
+	arch = x86_64
+	license = custom
+	depends = libxss
+	depends = nss
+	depends = gtk3
+	provides = postman
+	conflicts = postman
+	options = !strip
+	source = postman-10.10.3-linux-x64.tar.gz::https://dl.pstmn.io/download/version/10.10.3/linux64
+	source = postman.desktop
+	sha256sums = 33360662fae7a6e2b9a8f84c94f3f8305df37f5255bf88c45e6e690a6b813436
+	sha256sums = d87542ac18455ff341da7c5efd01db96a01f659b1bf546840aa4ac8bd085802d
+
+pkgname = postman-bin
