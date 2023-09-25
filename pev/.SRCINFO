@@ -1,0 +1,15 @@
+pkgbase = pev
+	pkgdesc = command line toolkit to work with and analyze PE (Portable Executables) binaries
+	pkgver = 0.82
+	pkgrel = 1
+	url = https://github.com/mentebinaria/readpe
+	arch = i686
+	arch = x86_64
+	license = GPL
+	depends = glibc
+	depends = openssl
+	source = readpe-0.82.tar.gz::https://github.com/mentebinaria/readpe/archive/refs/tags/v0.82.tar.gz
+	md5sums = ec6d5248221509d4815290e534138227
+	sha256sums = 6ee625acedb3cbe636afe41f854b6eed5aac466d7fad52e3a48557083f8acecc
+
+pkgname = pev
