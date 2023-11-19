@@ -4,7 +4,8 @@
 
 pkgname=pokerth
 pkgver=1.1.2
-pkgrel=30
+pkgrel=36
+
 pkgdesc="Client to online Poker game written in C++/Qt"
 arch=('i686' 'x86_64')
 url="http://www.pokerth.net/"
@@ -23,8 +24,8 @@ source=(https://sourceforge.net/projects/$pkgname/files/$pkgname/$pkgver/$pkgnam
 md5sums=('8fd7d7fc7ece17315e58aa3240dd4586'
          '0ef5541fc6008dfb2521dcab47afb659'
          '50d427bd8afc57fb61e186de6c4e5601'
-         'e5bf2357733b4508737f8271f3c1e65f'
-         '38e079c6c4943cc4466c5bb402bd8dd6'
+         '5bdcc1f2240c20f4b766b183d93836b3'
+         '64e1b4b08353c11370ea32dfc381ca97'
          'e61eae14e6394f4745245e2ef42d812c')
 
 prepare() {
@@ -41,12 +42,12 @@ prepare() {
   # see also DEFINE+="BOOST_BIND_GLOBAL_PLACEHOLDERS" in build below
   patch -Np1 -i "${srcdir}/pokerth-1.1.2.patch.2020"
   # ----------------------------------------------------------------------------
-  # change to explicitly link /usr/lib/libabsl_log_internal_message.so and
-  #                           /usr/lib/libabsl_log_internal_check_op.so
+  # change to explicitly link libabsl_log_internal_message.so and
+  #                           libabsl_log_internal_check_op.so
+  #                           patch revised by xx55tt
   patch -Np1 -i "${srcdir}/pokerth-1.1.2.patch.2023"
   # ----------------------------------------------------------------------------
   # change to use XDG_CONFIG_HOME if available
-  # currently sets folder within XDG_CONFIG_HOME to be .pokerth rather than pokerth
   # changes suggested by @viktoracoric
   # patch -Np1 -i "${srcdir}/pokerth-1.1.2.patch.xdg.2023"
   # ----------------------------------------------------------------------------
