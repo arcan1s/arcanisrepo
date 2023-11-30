@@ -1,4 +1,5 @@
-export PATH="${srcdir}/flutter/bin:$PATH"
-export FLUTTER_ENGINE="${srcdir}/flutter-engine"
+#!/hint/bash
 
-local flutter_select_engine='--local-engine=arch_release --local-engine-host=arch_release'
+source '/opt/flutter-engine/base.incl'
+
+_setup_env
