@@ -14,7 +14,7 @@
 #  - https://packages.cloud.google.com/apt/pool/google-cloud-cli_455.0.0-0_all_568366af2c266f73f44b302536eb2b7e143d67d783aaf0f89452dbd8ca805410.deb
 _extractedName="google-cloud-sdk"
 pkgname="google-cloud-cli"
-pkgver=462.0.0
+pkgver=462.0.1
 pkgrel=1
 pkgdesc="A set of command-line tools for the Google Cloud Platform. Includes gcloud (with beta and alpha commands), gsutil, and bq."
 url="https://cloud.google.com/cli/"
@@ -38,9 +38,10 @@ source=(
 # Conflict the old package name to force migration
 conflicts=('google-cloud-sdk')
 provides=('google-cloud-sdk')
-sha256sums=('4d1d60fa056f2f491b179f4d23b89899b9b7fc1691ad8ddcbf2ac901540c3021'
+replaces=('google-cloud-sdk')
+sha256sums=('3bdad9713b66f491172b1768a10ddab2043e3e5302832fe44e93499cb734a909'
             'e03ffb8a534b175dc497621a0396bcc29884279daa519e2cb90bd98c61d6530a'
-            '4694f5191ceea7cf8076861ce5790ba9e809023da278b0f6ed862b9611e5aa93')
+            'c19dbe916e6fd18d9b17b3309ee60c5d389035c5520822d2c14c045d8b853924')
 
 prepare() {
   cd "${_extractedName}"
@@ -76,11 +77,17 @@ package() {
   install -D -m 0755 "${srcdir}/${source[1]}" \
     "${pkgdir}/etc/profile.d/google-cloud-cli.sh"
 
-  install -D -m 0644 "${pkgdir}/opt/${pkgname}/completion.bash.inc" \
+  install -d -m 0755 \
+    "${pkgdir}/etc/bash_completion.d" \
+    "${pkgdir}/usr/share/zsh/site-functions" \
+
+  ln -rsT "${pkgdir}/opt/${pkgname}/completion.bash.inc" \
     "${pkgdir}/etc/bash_completion.d/google-cloud-cli"
 
-  install -D -m 0644 "${pkgdir}/opt/${pkgname}/completion.zsh.inc" \
-    "${pkgdir}/usr/share/zsh/site-functions/_gcloud"
+  for cmd in gcloud gsutil bq; do
+    ln -rsT "${pkgdir}/opt/${pkgname}/completion.zsh.inc" \
+      "${pkgdir}/usr/share/zsh/site-functions/_${cmd}"
+  done
 
   mkdir -p "${pkgdir}/usr/share"
   mv -f "${pkgdir}/opt/${pkgname}/help/man" "${pkgdir}/usr/share/"
