@@ -3,14 +3,14 @@
 # Contributor: Manuel Schneider  <manuelschneid3r at googles mail>
 
 pkgname=albert
-pkgver=0.22.17
-pkgrel=1
+pkgver=0.23.0
+pkgrel=2
 pkgdesc="A sophisticated standalone keyboard launcher"
 arch=('x86_64')
 url="https://github.com/albertlauncher"
 license=('GPL')
 depends=('hicolor-icon-theme' 'qt6-5compat' 'qt6-declarative' 'qt6-scxml' 'qt6-shadertools' 'qt6-svg')
-makedepends=('cmake' 'git' 'libqalculate' 'pybind11' 'python')
+makedepends=('cmake' 'git' 'libqalculate' 'pybind11' 'python' 'qt6-tools')
 optdepends=('ddgr: duckduckgo search plugin'
             'libarchive: documentation plugin'
             'libqalculate: calculator plugin'
@@ -37,6 +37,7 @@ build() {
     -DBUILD_CHROMIUM=ON \
     -DBUILD_CLIPBOARD=ON \
     -DBUILD_DATETIME=ON \
+    -DBUILD_DICTIONARY=ON \
     -DBUILD_DEBUG=OFF \
     -DBUILD_FILES=ON \
     -DBUILD_HASH=ON \
@@ -61,4 +62,4 @@ package() {
   make DESTDIR="$pkgdir/" install
 }
 
-sha512sums=('35b10c8f364099c975c5ab5fba42c22dde5d630cff42c54aeaed019f1762d201110c7d76b40e32a8a43b7a7db1af6ace7468d73d58d2e175ab561a67dd046448')
+sha512sums=('8aae88d69081a1f24b52c682be9e16d8f13eac1136dfdca884ed55c7408a758fb571161c88422187070cdc05fb00a5846d6729b49a35f9c52db575a96cf87c15')
