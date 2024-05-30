@@ -2,7 +2,7 @@
 
 pkgname=drawio-desktop
 pkgver=24.4.8
-pkgrel=2
+pkgrel=3
 pkgdesc='Diagram drawing application built on web technology'
 arch=('any')
 url='https://github.com/jgraph/drawio-desktop'
@@ -10,7 +10,7 @@ license=('Apache-2.0')
 _electronver=30
 _nodever=20
 depends=("electron$_electronver" libnotify shared-mime-info)
-makedepends=(yarn "nodejs>=$_nodever")
+makedepends=(yarn ant "nodejs>=$_nodever")
 options=('!strip')
 source=("drawio-$pkgver.tar.gz::https://github.com/jgraph/drawio/archive/v$pkgver.tar.gz"
         "drawio-desktop-$pkgver.tar.gz::https://github.com/jgraph/drawio-desktop/archive/v$pkgver.tar.gz"
@@ -22,10 +22,24 @@ sha512sums=('c6d48e8bee55b9330d4239fab23a304d2ad3dfd3be7c4dc220a5abc1859c4b74f2c
 build() {
   rm -rf "$srcdir/drawio-desktop-$pkgver/drawio"
   mv "$srcdir/drawio-$pkgver" "$srcdir/drawio-desktop-$pkgver/drawio"
-  cd "$srcdir/drawio-desktop-$pkgver"
+
+  # rebuild min.js
+  cd "$srcdir/drawio-desktop-$pkgver"/drawio/
+  rm -fv src/main/webapp/js/app.min.js src/main/webapp/js/extensions.min.js src/main/webapp/js/stencils.min.js
+  cd "$srcdir/drawio-desktop-$pkgver"/drawio/etc/build
+  LC_ALL=C.UTF-8 ant app
 
   # clean unused files up
-  rm -rfv drawio/src/main/webapp/META-INF drawio/src/main/webapp/WEB-INF
+  cd "$srcdir/drawio-desktop-$pkgver"/drawio/
+  rm -rfv src/main/webapp/META-INF src/main/webapp/WEB-INF
+  # copied from https://github.com/jgraph/drawio-desktop/blob/5bab12f0829768748d25dec0a4f8e9ae4b3db090/.github/workflows/electron-builder.yml#L53
+  rm -rfv etc src/main/java src/main/mxgraph src/main/webapp/connect src/main/webapp/shapes src/main/webapp/stencils src/main/webapp/service-worker* src/main/webapp/workbox-*
+  cd src/main/webapp/js
+  cp diagramly/DesktopLibrary.js diagramly/ElectronApp.js .
+  rm -rfv atlas-viewer.min.js atlas.min.js cryptojs deflate diagramly dropbox embed* freehand grapheditor integrate.min.js jquery jscolor onedrive orgchart reader.min.js rough sanitizer shapes.min.js simplepeer spin viewer-static.min.js viewer.min.js
+  mkdir diagramly
+  mv DesktopLibrary.js ElectronApp.js diagramly
+  cd "$srcdir/drawio-desktop-$pkgver"/
 
   # Electron version compatibility check
   echo "Checking electron version"
