@@ -4,7 +4,7 @@
 
 pkgname=gconf
 pkgver=3.2.6+11+g07808097
-pkgrel=13
+pkgrel=14
 pkgdesc="An obsolete configuration database system"
 url="https://gitlab.gnome.org/Archive/gconf"
 arch=($CARCH)
@@ -33,6 +33,10 @@ prepare() {
   # http://bugzilla.gnome.org/show_bug.cgi?id=568845
   patch -Np1 -i ../01_xml-gettext-domain.patch
 
+  # TODO: Mega hack, needs a proper fix!
+  mkdir m4
+  cp /usr/share/gettext/m4/nls.m4 m4/nls.m4
+
   NOCONFIGURE=1 ./autogen.sh
 }
 
@@ -49,7 +53,7 @@ build() {
     --disable-orbit \
     --disable-gsettings-backend
   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
-  make
+  make CFLAGS+="-DGLIB_DISABLE_DEPRECATION_WARNINGS -Wno-unused-result"
 }
 
 check() {
