@@ -2,10 +2,10 @@
 # Maintainer: Arjix <me@arjix.dev>
 
 pkgname=vicinae
-pkgver=0.19.3
-pkgrel=1
+pkgver=0.19.6
+pkgrel=5
 pkgdesc="A focused launcher for your desktop — native, fast, extensible"
-arch=('x86_64')
+arch=('x86_64' 'aarch64')
 url="https://github.com/vicinaehq/vicinae"
 license=('GPL3')
 depends=(
@@ -28,17 +28,24 @@ makedepends=(
   'rapidfuzz-cpp'
   'jq'
   'glaze'
+  'curl'
 )
 provides=("vicinae")
+conflicts=("vicinae")
 source=(
   "${pkgname}-v${pkgver}.tar.gz::${url}/archive/refs/tags/v$pkgver.tar.gz"
-  "${pkgname}-v${pkgver}-meta.yml::https://api.github.com/repos/vicinaehq/vicinae/git/ref/tags/v${pkgver}"
   "vicinae.hook"
 )
 
-sha256sums=('ff0fd28e14be3a595be33a7cf0bbb47223bc8a0e1b76b89deb3f4131dd0bf942'
-            '1fd1b29a788560810eacbd71c3401662edc503b8bf918d2bde000f5e014bc97d'
+sha256sums=('66f53cb90124f589199ed9a73f26b17d6aa03c1f0281f576991f18264b870d93'
             '870f29cb68436deaaed2b87dff89bc753afdef8dcbfd1ec35c070bc39efe10a5')
+
+prepare() {
+    curl "https://api.github.com/repos/vicinaehq/vicinae/git/ref/tags/v${pkgver}" \
+	--output "${pkgname}-v${pkgver}-meta.yml" \
+	--silent \
+	--follow
+}
 
 build() {
   SHA=$(jq .object.sha "${pkgname}-v${pkgver}-meta.yml" -r)
@@ -49,31 +56,16 @@ build() {
     -DVICINAE_GIT_COMMIT_HASH="${SHA:0:7}" \
     -DCMAKE_BUILD_TYPE=Release \
     -DVICINAE_PROVENANCE=aur \
+    -DCMAKE_INSTALL_PREFIX=/usr \
     -B build
 
   cmake --build build
 }
 
 package() {
-  # Bin
-  install -Dm755 "$srcdir/$pkgname-$pkgver/build/$pkgname/$pkgname" "$pkgdir/usr/bin/$pkgname"
-
-  # Themes
-  mkdir -p $pkgdir/usr/share/$pkgname
-  cp -r "$srcdir/$pkgname-$pkgver/extra/themes/" "$pkgdir/usr/share/$pkgname/"
-
-  # Desktop entry
-  install -Dm644 "$srcdir/$pkgname-$pkgver/extra/$pkgname.desktop" "$pkgdir/usr/share/applications/$pkgname.desktop"
-  
-  # Deeplink handler
-  install -Dm644 "$srcdir/$pkgname-$pkgver/extra/$pkgname-url-handler.desktop" "$pkgdir/usr/share/applications/$pkgname-url-handler.desktop"
-
-  # Systemd Service
-  install -Dm644 "$srcdir/$pkgname-$pkgver/extra/$pkgname.service" "$pkgdir/usr/lib/systemd/user/$pkgname.service"
-
-  # SVG icon
-  install -Dm644 "$srcdir/$pkgname-$pkgver/$pkgname/icons/$pkgname.svg" "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname.svg"
+  cd "$pkgname-$pkgver"
+  DESTDIR="$pkgdir" cmake --install build
 
   # Pacman hook
-  install -Dm644 "$srcdir/${pkgname}.hook" "$pkgdir/usr/share/libalpm/hooks/${pkgname}.hook"
+  install -Dm644 "$srcdir/${pkgname%-git}.hook" "$pkgdir/usr/share/libalpm/hooks/${pkgname%-git}.hook"
 }
