@@ -1,11 +1,12 @@
 # Maintainer: cilgin <cilgincc@outlook.com>
 # Maintainer: Arjix <me@arjix.dev>
+# Maintainer: Aurelle <aur@aurelle.dev>
 
 # shellcheck disable=SC2034
 # shellcheck disable=SC2154
 pkgname=vicinae
-pkgver=0.23.2
-pkgrel=1
+pkgver=0.26.3
+pkgrel=2
 pkgdesc="A focused launcher for your desktop — native, fast, extensible"
 arch=('x86_64' 'aarch64')
 url="https://github.com/vicinaehq/vicinae"
@@ -14,12 +15,9 @@ depends=(
   'nodejs'
   'qt6-base'
   'qt6-svg'
-  'cmark-gfm'
   'layer-shell-qt'
   'libqalculate'
-  'minizip'
   'qtkeychain-qt6'
-  'libxml2'
   'qt6-declarative'
   'syntax-highlighting'
 )
@@ -28,11 +26,13 @@ makedepends=(
   'cmake'
   'ninja'
   'npm'
-  'rapidfuzz-cpp'
   'jq'
   'glaze'
   'curl'
   'qt6-shadertools'
+  'qt6-tools'
+  'wayland-protocols'
+  'cmark-gfm'
 )
 install=vicinae.install
 provides=("vicinae")
@@ -42,7 +42,7 @@ source=(
   "vicinae.hook"
 )
 
-sha256sums=('725024c254540bae56d081f7e401df21f7ab89957e2b4a9701fd1591b1dd0092'
+sha256sums=('0717a31f0daac4872fb752e33db0fcdc4a9c2b64b145e1e9a444703b57ad23f2'
             '196fc6a6afea06fc94d6ca4ff45c422bdef02aa25b8f2a80579dce27e56a2ae1')
 
 prepare() {
