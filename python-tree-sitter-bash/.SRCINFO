@@ -1,0 +1,19 @@
+pkgbase = python-tree-sitter-bash
+	pkgdesc = Bash grammar for tree-sitter
+	pkgver = 0.25.1
+	pkgrel = 2
+	url = https://github.com/tree-sitter/tree-sitter-bash
+	arch = x86_64
+	license = MIT
+	checkdepends = python-pytest
+	makedepends = git
+	makedepends = python-build
+	makedepends = python-installer
+	makedepends = python-setuptools
+	makedepends = python-wheel
+	depends = python
+	depends = python-tree-sitter
+	source = git+https://github.com/tree-sitter/tree-sitter-bash.git#tag=v0.25.1
+	sha256sums = SKIP
+
+pkgname = python-tree-sitter-bash
